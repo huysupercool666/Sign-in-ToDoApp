@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/authenticationForm.css" />
+    <script src="../js/authentication.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-login">
+        <h2>Login</h2>
+        <p>Please fill in this form to create an account</p>
+        <hr />
+        <label for="email"><b>Email</b></label>
+        <input type="text" id="email" placeholder="Enter email" />
+        <label for="password"><b>Password</b></label>
+        <input type="password" id="password" placeholder="Enter password" />
+        <hr />
+        <input type="checkbox" id="rememberMe" /> Remember Me
+        <div>
+          <p>Signup here: <a href="../html/signup.html">Register</a></p>
+        </div>
+        <button class="button" id="loginButton" onclick="login()">Login</button>
+      </div>
+    </div>
+  </body>
+</html>

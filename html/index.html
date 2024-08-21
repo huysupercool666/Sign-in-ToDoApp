@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/toDoAppForm.css" />
+    <script src="../js/script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="greeting"></h1>
+
+      <div class="container-logo">
+        <img src="../img/todo.png" alt="" />
+        <h1>TODO</h1>
+      </div>
+      <div class="form-input">
+        <input
+          type="text"
+          name="inputName"
+          id="inputValue"
+          placeholder="Task name..."
+        />
+        <button class="button" id="addButton">Add</button>
+        <button class="button" id="cancelButton">Cancel</button>
+      </div>
+      <ul id="taskList"></ul>
+      <div class="filter">
+        <label for="">filter :</label>
+        <select id="filter">
+          <option value="all" selected>All</option>
+          <option value="undone">Undone</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+      <br>
+      <div>
+        <button class="button-logout right" type="button" onclick="logout()">Log out</button>
+      </div>
+    </div>
+  </body>
+</html>
