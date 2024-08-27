@@ -1,21 +1,34 @@
+import regexCondition from "./constant"
+
 if (!localStorage.getItem("users")) {
   localStorage.setItem("users", JSON.stringify([]));
 }
+
 function register() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const repassword = document.getElementById("repassword").value;
-
   if (email !== "" && password !== "" && repassword !== "") {
     if (password !== repassword) {
-      alert("Repassword not match!");
+      alert("Repassword does not match!");
       return;
     }
+
     let users = JSON.parse(localStorage.getItem("users")) || [];
     const userExists = users.some((user) => user.email === email);
 
     if (userExists) {
       alert("Email is already registered!");
+      return;
+    } 
+
+    if (!checkLocalPartOfEmail(email)) {
+      alert("The part before @gmail.com is invalid.");
+      return;
+    }
+
+    if (!checkDoc(email)) {
+      alert("The domain part of the email is invalid.");
       return;
     }
 
@@ -34,32 +47,41 @@ function register() {
   }
 }
 
+function checkDoc(email) {
+  const docParts = email.split('@')[1].split('.'); 
+  const regex = regexCondition;
+  for (let part of docParts) {
+    if (part.length < 2 || !regex.test(part)) {
+      return false; 
+    }
+  }
+  return true; 
+}
+
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const rememberMe = document.getElementById("rememberMe").checked;
+  const rememberMe = document.getElementById("remember-me").checked;
 
   if (email !== "" && password !== "") {
     let users = JSON.parse(localStorage.getItem("users") || []);
     const user = users.find(
       (user) => user.email === email && user.password === password
     );
-      if (user) {
-        alert("Login successful!");
+    if (user) {
+      alert("Login successful!");
 
-        if (rememberMe) {
-          localStorage.setItem("rememberedUser", JSON.stringify(user));
-        } else {
-          sessionStorage.setItem("currentUser", JSON.stringify(user));
-        }
+      if (rememberMe) {
+        localStorage.setItem("rememberedUser", JSON.stringify(user));
+      } else {
+        sessionStorage.setItem("currentUser", JSON.stringify(user));
+      }
 
-        window.location.href = "./index.html";
-      } 
-    else {
+      window.location.href = "./index.html";
+    } else {
       alert("Invalid email or password.");
     }
-  } 
-  else {
+  } else {
     alert("Please fill in both email and password fields.");
   }
 }
@@ -81,4 +103,4 @@ window.onload = function () {
     window.location.href = "./login.html";
   }
 };
- 
+

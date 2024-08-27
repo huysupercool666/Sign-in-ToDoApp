@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../css/authenticationForm.css" />
-    <script src="../js/authentication.js" defer></script>
+    <link rel="stylesheet" href="../styles/authenticationForm.css" />
+    <script src="../scripts/authentication.js" defer></script>
+    <script src="../scripts/constant.js"></script>
   </head>
   <body>
     <div class="container">
@@ -18,11 +19,7 @@
         <label for="password"><b>Password</b></label>
         <input type="password" id="password" placeholder="Enter password" />
         <label for="repassword"><b>Repeat password</b></label>
-        <input
-          type="password"
-          id="repassword"
-          placeholder="Repeat password"
-        />
+        <input type="password" id="repassword" placeholder="Repeat password" />
         <hr />
         <button class="button" id="registerButton" onclick="register()">
           Register

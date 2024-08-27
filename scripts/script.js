@@ -6,7 +6,7 @@ function tasks() {
 tasks.prototype.addTask = function () {
   const taskName = document.getElementById("inputValue").value.trim();
   if (taskName !== "") {
-    if (this.listTask.filter((task) => taskName === task.name).length === 0) {
+    if (this.listTask.filter((task) => taskName.id === task.id ).length === 0) {
       const filterStatus = document.getElementById("filter").value;
       let newTask = {
         id: ++this.idCounter,
@@ -96,13 +96,13 @@ tasks.prototype.toggleCompleted = function (id) {
 };
 
 tasks.prototype.sortTask = function () {
-  this.listTask.sort(function (task1, task2) {
-    if (task1.completed != task2.completed) {
-      return task1.completed - task2.completed;
+  this.listTask.sort(function (taskFirst, taskAfter) {
+    if (taskFirst.completed != taskAfter.completed) {
+      return taskFirst.completed - taskAfter.completed;
     }
-    return !isNaN(task1.name) && !isNaN(task2.name)
-      ? task1.name - task2.name
-      : task1.name.localeCompare(task2.name);
+    return !isNaN(taskFirst.name) && !isNaN(taskAfter.name)
+      ? taskFirst.name - taskAfter.name
+      : taskFirst.name.localeCompare(taskAfter.name);
   });
 };
 
@@ -134,6 +134,7 @@ window.onload = function () {
     document.getElementById(
       "greeting"
     ).innerText = `Hello ${rememberedUser.email?.split("@gmail.com").join("")}`;
+    console.log(rememberedUser);
   } else if (currentSessionUser) {
     document.getElementById(
       "greeting"
