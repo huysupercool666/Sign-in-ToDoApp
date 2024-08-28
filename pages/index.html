@@ -4,28 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../css/toDoAppForm.css" />
-    <script src="../js/script.js" defer></script>
+    <link rel="stylesheet" href="../styles/toDoAppForm.css" />
+    <script src="../scripts/script.js" defer></script>
+    <script src="../scripts/authentication.js"></script>
   </head>
   <body>
     <div class="container">
       <h1 id="greeting"></h1>
 
       <div class="container-logo">
-        <img src="../img/todo.png" alt="" />
+        <img src="../images/todo.png" alt="" />
         <h1>TODO</h1>
       </div>
       <div class="form-input">
         <input
           type="text"
-          name="inputName"
-          id="inputValue"
+          name="input-name"
+          id="input-value"
           placeholder="Task name..."
         />
-        <button class="button" id="addButton">Add</button>
-        <button class="button" id="cancelButton">Cancel</button>
+        <button class="button" id="add-button">Add</button>
+        <button class="button" id="cancel-button">Cancel</button>
       </div>
-      <ul id="taskList"></ul>
+      <ul id="tasklist"></ul>
       <div class="filter">
         <label for="">filter :</label>
         <select id="filter">

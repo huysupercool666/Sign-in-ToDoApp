@@ -1,34 +1,19 @@
-import regexCondition from "./constant"
-
 if (!localStorage.getItem("users")) {
   localStorage.setItem("users", JSON.stringify([]));
 }
 
 function register() {
-  const email = document.getElementById("email").value.trim();
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const repassword = document.getElementById("repassword").value;
-  if (email !== "" && password !== "" && repassword !== "") {
-    if (password !== repassword) {
-      alert("Repassword does not match!");
+  const repeatPassword = document.getElementById("repeat-password").value;
+  if (email !== "" && password !== "" && repeatPassword !== "") {
+    if (password !== repeatPassword) {
+      alert("Repeat password does not match!");
       return;
     }
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.some((user) => user.email === email);
-
-    if (userExists) {
-      alert("Email is already registered!");
-      return;
-    } 
-
-    if (!checkLocalPartOfEmail(email)) {
-      alert("The part before @gmail.com is invalid.");
-      return;
-    }
-
-    if (!checkDoc(email)) {
-      alert("The domain part of the email is invalid.");
+    if (!checkValidEmail(email)) {
       return;
     }
 
@@ -47,17 +32,6 @@ function register() {
   }
 }
 
-function checkDoc(email) {
-  const docParts = email.split('@')[1].split('.'); 
-  const regex = regexCondition;
-  for (let part of docParts) {
-    if (part.length < 2 || !regex.test(part)) {
-      return false; 
-    }
-  }
-  return true; 
-}
-
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -72,9 +46,9 @@ function login() {
       alert("Login successful!");
 
       if (rememberMe) {
-        localStorage.setItem("rememberedUser", JSON.stringify(user));
+        localStorage.setItem("remembered-user", JSON.stringify(user));
       } else {
-        sessionStorage.setItem("currentUser", JSON.stringify(user));
+        sessionStorage.setItem("current-user", JSON.stringify(user));
       }
 
       window.location.href = "./index.html";
@@ -87,20 +61,29 @@ function login() {
 }
 
 window.onload = function () {
-  const rememberedUser = JSON.parse(localStorage.getItem("rememberedUser"));
-  const currentSessionUser = JSON.parse(sessionStorage.getItem("currentUser"));
+  const rememberedUser = JSON.parse(localStorage.getItem("remembered-user"));
+  const currentSessionUser = JSON.parse(sessionStorage.getItem("current-user"));
   const currentPage = window.location.pathname.split("/").pop();
 
-  if (rememberedUser) {
+  if (rememberedUser || currentSessionUser) {
     if (currentPage === "./login.html" || currentPage === "./signup.html") {
-      window.location.href = "./index.html";
+      window.location.href = "index.html";
     }
-  } else if (currentSessionUser) {
-    if (currentPage === "./login.html" || currentPage === "./signup.html") {
-      window.location.href = "./index.html";
+  } else {
+    if (currentPage === "./index.html" || currentPage === "") {
+      window.location.href = "login.html";
     }
-  } else if (currentPage === "./index.html") {
-    window.location.href = "./login.html";
   }
 };
 
+function logout() {
+  const confirmation = confirm("Are you sure you want to log out?");
+  if (confirmation) {
+    localStorage.removeItem("remembered-user");
+    sessionStorage.removeItem("current-user");
+    alert("Logout successful!");
+    window.location.href = "./login.html";
+  } else {
+    return;
+  }
+}

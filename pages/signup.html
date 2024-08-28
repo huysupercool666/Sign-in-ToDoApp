@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../styles/authenticationForm.css" />
     <script src="../scripts/authentication.js" defer></script>
     <script src="../scripts/constant.js"></script>
+    <script src="../scripts/utils.js"></script>
   </head>
   <body>
     <div class="container">
@@ -15,13 +16,13 @@
         <p>Please fill in this form to create an account</p>
         <hr />
         <label for="email"><b>Email</b></label>
-        <input type="text" id="email" placeholder="Enter email" required />
+        <input type="text" id="email" placeholder="Enter email" />
         <label for="password"><b>Password</b></label>
         <input type="password" id="password" placeholder="Enter password" />
         <label for="repassword"><b>Repeat password</b></label>
-        <input type="password" id="repassword" placeholder="Repeat password" />
+        <input type="password" id="repeat-password" placeholder="Repeat password" />
         <hr />
-        <button class="button" id="registerButton" onclick="register()">
+        <button class="button" id="register-button" onclick="register()">
           Register
         </button>
       </div>
