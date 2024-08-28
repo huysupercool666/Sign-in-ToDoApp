@@ -10,7 +10,7 @@ tasks.prototype.addTask = function () {
     let newTask = {
       id: ++this.idCounter,
       name: taskName,
-      completed: filterStatus === "done",
+      completed: filterStatus === statusCondition.undone,
     };
     this.listTask.push(newTask);
     this.saveTasks();
@@ -59,9 +59,9 @@ tasks.prototype.editTask = function (id) {
 
 tasks.prototype.filterTask = function () {
   const filterStatus = document.getElementById("filter").value;
-  if (filterStatus === "done") {
+  if (filterStatus === statusCondition.done) {
     this.render(this.listTask.filter(task => task.completed === true));
-  } else if (filterStatus === "undone") {
+  } else if (filterStatus === statusCondition.unDone) {
     this.render(this.listTask.filter(task => task.completed === false));
   } else {
     this.render(this.listTask);
