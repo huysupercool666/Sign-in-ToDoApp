@@ -16,10 +16,9 @@ function register() {
     if (!checkValidEmail(email)) {
       return;
     }
-
     const newUser = {
       email: email,
-      password: password,
+      taskList: [],
     };
     users.push(newUser);
 
