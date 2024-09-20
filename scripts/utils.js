@@ -32,13 +32,9 @@ function checkValidEmail(email) {
     return;
   }
 
-  //error username have special character
-  const regex = regexCondition;
-  for (let part of checkEmailPartDoc) {
-    if (!regex.test(part)) {
-      alert("Email mustn't have special character");
-      return;
-    }
+  if (specialCharacter.test(localPart)) {
+    alert("Username must not contain special characters");
+    return false;
   }
   return true;
 }

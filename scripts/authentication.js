@@ -2,11 +2,19 @@ if (!localStorage.getItem("users")) {
   localStorage.setItem("users", JSON.stringify([]));
 }
 
-function register() {
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function register() {
   let users = JSON.parse(localStorage.getItem("users")) || [];
   let email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const repeatPassword = document.getElementById("repeat-password").value;
+  const hashedPassword = await hashPassword(password);
   if (email !== "" && password !== "" && repeatPassword !== "") {
     if (password !== repeatPassword) {
       alert("Repeat password does not match!");
@@ -18,6 +26,7 @@ function register() {
     }
     const newUser = {
       email: email,
+      password: hashedPassword,
       taskList: [],
     };
     users.push(newUser);
@@ -31,16 +40,16 @@ function register() {
   }
 }
 
-function login() {
+async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const rememberMe = document.getElementById("remember-me").checked;
-
+  const hashedPassword = await hashPassword(password);
+  
   if (email !== "" && password !== "") {
     let users = JSON.parse(localStorage.getItem("users") || []);
     const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
+      (user) => user.email === email && user.password === hashedPassword);
     if (user) {
       alert("Login successful!");
 

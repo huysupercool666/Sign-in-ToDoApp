@@ -1,18 +1,18 @@
 function tasks() {
-  this.listTask = [];
+  this.taskList = [];
 }
 
 tasks.prototype.addTask = function () {
   const taskName = document.getElementById("input-value").value.trim();
   if (taskName !== "") {
     const filterStatus = document.getElementById("filter").value;
-    const idCounter = this.listTask.length > 0 ? this.listTask.reduce((max, task) => task.id > max ? task.id : max, 0) : 0;
+    const idCounter = this.taskList.length > 0 ? this.taskList.reduce((max, task) => task.id > max ? task.id : max, 0) : 0;
     let newTask = {
       id: idCounter + 1,
       name: taskName,
       completed: filterStatus === statusCondition.undone,
     };
-    this.listTask.push(newTask);
+    this.taskList.push(newTask);
     this.saveTasks();
     this.cancelTask();
     this.sortTask();
@@ -30,7 +30,7 @@ tasks.prototype.saveTasks = function () {
     const userIndex = users.findIndex(
       (user) => user.email === currentUser.email
     );
-    users[userIndex].taskList = this.listTask;
+    users[userIndex].taskList = this.taskList;
     localStorage.setItem("users", JSON.stringify(users));
 
     if (sessionStorage.getItem("current-user")) {
@@ -47,8 +47,8 @@ tasks.prototype.loadTasks = function () {
     JSON.parse(localStorage.getItem("remembered-user"));
 
   if (currentUser) {
-    this.listTask = currentUser.taskList || [];
-    this.render(this.listTask);
+    this.taskList = currentUser.taskList || [];
+    this.render(this.taskList);
   }
 };
 
@@ -79,34 +79,34 @@ tasks.prototype.cancelTask = function () {
 };
 
 tasks.prototype.deleteTask = function (id) {
-  this.listTask = this.listTask.filter((item) => item.id !== id);
+  this.taskList = this.taskList.filter((item) => item.id !== id);
   this.saveTasks();
-  this.render(this.listTask);
+  this.render(this.taskList);
 };
 
 tasks.prototype.editTask = function (id) {
-  const task = this.listTask.find((task) => task.id === id);
+  const task = this.taskList.find((task) => task.id === id);
   const newTaskName = prompt("Change your task here", task.name);
   if (newTaskName !== null && newTaskName.trim() !== "") {
     task.name = newTaskName.trim();
     this.saveTasks();
-    this.render(this.listTask);
+    this.render(this.taskList);
   }
 };
 
 tasks.prototype.filterTask = function () {
   const filterStatus = document.getElementById("filter").value;
   if (filterStatus === statusCondition.done) {
-    this.render(this.listTask.filter((task) => task.completed === true));
+    this.render(this.taskList.filter((task) => task.completed === true));
   } else if (filterStatus === statusCondition.unDone) {
-    this.render(this.listTask.filter((task) => task.completed === false));
+    this.render(this.taskList.filter((task) => task.completed === false));
   } else {
-    this.render(this.listTask);
+    this.render(this.taskList);
   }
 };
 
 tasks.prototype.toggleCompleted = function (id) {
-  this.listTask = this.listTask.map((item) =>
+  this.taskList = this.taskList.map((item) =>
     item.id === id ? { ...item, completed: !item.completed } : item
   );
   this.saveTasks();
@@ -115,7 +115,7 @@ tasks.prototype.toggleCompleted = function (id) {
 };
 
 tasks.prototype.sortTask = function () {
-  this.listTask.sort(function (taskFirst, taskAfter) {
+  this.taskList.sort(function (taskFirst, taskAfter) {
     if (taskFirst.completed != taskAfter.completed) {
       return taskFirst.completed - taskAfter.completed;
     }
@@ -123,7 +123,7 @@ tasks.prototype.sortTask = function () {
       ? taskFirst.name - taskAfter.name
       : taskFirst.name.localeCompare(taskAfter.name);
   });
-  this.render(this.listTask);
+  this.render(this.taskList);
 };
 
 let newTaskList = new tasks();
