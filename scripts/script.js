@@ -74,6 +74,7 @@ tasks.prototype.render = function (listArray) {
     .join("");
 };
 
+
 tasks.prototype.cancelTask = function () {
   document.getElementById("input-value").value = "";
 };
@@ -127,15 +128,15 @@ tasks.prototype.sortTask = function () {
 };
 
 let newTaskList = new tasks();
-document.getElementById("add-button").addEventListener("click", function () {
+buttonAdd.addEventListener("click", function () {
   newTaskList.addTask();
 });
 
-document.getElementById("cancel-button").addEventListener("click", function () {
+buttonCancel.addEventListener("click", function () {
   newTaskList.cancelTask();
 });
 
-document.getElementById("filter").addEventListener("change", function () {
+filterCondition.addEventListener("change", function () {
   newTaskList.filterTask();
 });
 
@@ -147,11 +148,11 @@ window.onload = function () {
     let newTaskList = new tasks();
     newTaskList.loadTasks();
     if (rememberedUser) {
-      document.getElementById("greeting").innerText = `Hello ${
+      greeting.innerText = `Hello ${
         rememberedUser.email?.split("@")[0]
       }`;
     } else if (currentSessionUser) {
-      document.getElementById("greeting").innerText = `Hello ${
+      greeting.innerText = `Hello ${
         currentSessionUser.email?.split("@")[0]
       }`;
     } else if (currentPage === "index.html" || currentPage === "") {
