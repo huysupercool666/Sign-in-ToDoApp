@@ -4,20 +4,36 @@ function tasks() {
 
 tasks.prototype.addTask = function () {
   const taskName = document.getElementById("input-value").value.trim();
-  if (taskName !== "") {
+  const currentUser = JSON.parse(sessionStorage.getItem("current-user")) || JSON.parse(localStorage.getItem("remembered-user"));
+  
+  if (currentUser && taskName !== "") {
     const filterStatus = document.getElementById("filter").value;
-    const idCounter = this.taskList.length > 0 ? this.taskList.reduce((max, task) => task.id > max ? task.id : max, 0) : 0;
+    const userID = currentUser.id;
+    const userTasks = this.getUserTasks(userID);
+    
+    const idCounter = userTasks.length > 0 ? userTasks.reduce((max, task) => task.id > max ? task.id : max, 0) : 0;
     let newTask = {
       id: idCounter + 1,
       name: taskName,
       completed: filterStatus === statusCondition.undone,
     };
-    this.taskList.push(newTask);
-    this.saveTasks();
+    userTasks.push(newTask);
+    this.saveUserTasks(userID, userTasks);
+    this.taskList = userTasks;
     this.cancelTask();
     this.sortTask();
     this.filterTask();
   }
+};
+tasks.prototype.getUserTasks = function (userID) {
+  const tasksByUser = JSON.parse(localStorage.getItem("tasksByUser")) || {};
+  return tasksByUser[userID] || []; 
+};
+
+tasks.prototype.saveUserTasks = function (userID, userTasks) {
+  const tasksByUser = JSON.parse(localStorage.getItem("tasksByUser")) || {};
+  tasksByUser[userID] = userTasks; 
+  localStorage.setItem("tasksByUser", JSON.stringify(tasksByUser)); 
 };
 
 tasks.prototype.saveTasks = function () {
@@ -26,18 +42,9 @@ tasks.prototype.saveTasks = function () {
     JSON.parse(localStorage.getItem("remembered-user"));
 
   if (currentUser) {
-    let users = JSON.parse(localStorage.getItem("users"));
-    const userIndex = users.findIndex(
-      (user) => user.email === currentUser.email
-    );
-    users[userIndex].taskList = this.taskList;
-    localStorage.setItem("users", JSON.stringify(users));
-
-    if (sessionStorage.getItem("current-user")) {
-      sessionStorage.setItem("current-user", JSON.stringify(users[userIndex]));
-    } else {
-      localStorage.setItem("remembered-user", JSON.stringify(users[userIndex]));
-    }
+    const userID = currentUser.id;
+    this.saveUserTasks(userID, this.taskList);
+    this.render(this.taskList);
   }
 };
 
@@ -47,8 +54,9 @@ tasks.prototype.loadTasks = function () {
     JSON.parse(localStorage.getItem("remembered-user"));
 
   if (currentUser) {
-    this.taskList = currentUser.taskList || [];
-    this.render(this.taskList);
+    const userID = currentUser.id;
+    this.taskList = this.getUserTasks(userID);    
+    this.render(this.taskList); 
   }
 };
 
@@ -80,9 +88,16 @@ tasks.prototype.cancelTask = function () {
 };
 
 tasks.prototype.deleteTask = function (id) {
-  this.taskList = this.taskList.filter((item) => item.id !== id);
-  this.saveTasks();
-  this.render(this.taskList);
+  const currentUser = JSON.parse(sessionStorage.getItem("current-user")) || JSON.parse(localStorage.getItem("remembered-user"));
+  
+  if (currentUser) {
+    const userID = currentUser.id;
+    let userTasks = this.getUserTasks(userID);
+    userTasks = userTasks.filter((item) => item.id !== id);
+    this.saveUserTasks(userID, userTasks);
+    this.taskList = userTasks;
+    this.render(this.taskList);
+  }
 };
 
 tasks.prototype.editTask = function (id) {

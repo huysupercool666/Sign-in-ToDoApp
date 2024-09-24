@@ -15,6 +15,7 @@ async function register() {
   const password = document.getElementById("password").value;
   const repeatPassword = document.getElementById("repeat-password").value;
   const hashedPassword = await hashPassword(password);
+  const idCounter = users.length > 0 ? users.reduce((max, user) => user.id > max ? user.id : max, 0) + 1 : 1;
   if (email !== "" && password !== "" && repeatPassword !== "") {
     if (password !== repeatPassword) {
       alert("Repeat password does not match!");
@@ -25,13 +26,13 @@ async function register() {
       return;
     }
     const newUser = {
+      id: idCounter,
       email: email,
       password: hashedPassword,
-      taskList: [],
     };
     users.push(newUser);
-
     localStorage.setItem("users", JSON.stringify(users));
+    
     alert("Registration successful!");
     window.location.href = "./login.html";
   } else {
