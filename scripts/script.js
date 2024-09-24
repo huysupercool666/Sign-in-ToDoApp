@@ -16,6 +16,7 @@ tasks.prototype.addTask = function () {
       id: idCounter + 1,
       name: taskName,
       completed: filterStatus === statusCondition.undone,
+      userID: userID
     };
     userTasks.push(newTask);
     this.saveUserTasks(userID, userTasks);
